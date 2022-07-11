@@ -52,8 +52,10 @@ public class Encoder implements Action {
                     writer.write(ch);
                 }
             }
-
-
+            writer.flush();
+            reader.close();
+            writer.close();
+            
         } catch (IOException e) {
             return new Result(ResultCode.ERROR, "I/O Error");
         }
