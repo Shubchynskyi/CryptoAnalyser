@@ -27,16 +27,16 @@ public class Encoder implements Action {
 
         // делаем лист Character и сдвигаем на ключ
         List<Character> characters = new ArrayList<>();
-        for(char ch : Strings.ALPHABET.toCharArray()) {
+        for (char ch : Strings.ALPHABET.toCharArray()) {
             characters.add(ch);
         }
-        Collections.rotate(characters,key);
+        Collections.rotate(characters, key);
 
 
         // открываем потоки, читаем символ и записываем со сдвигом
         try {
             BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(pathFrom)));
-            if(Files.notExists(pathTo)) {
+            if (Files.notExists(pathTo)) {
                 Files.createFile(pathTo);
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(pathTo)));
@@ -53,10 +53,11 @@ public class Encoder implements Action {
                 }
             }
 
+
         } catch (IOException e) {
-            return new Result(ResultCode.ERROR,"I/O Error");
+            return new Result(ResultCode.ERROR, "I/O Error");
         }
 
-        return new Result(ResultCode.OK,"read all bytes " + pathFrom); //возвращаем результат
+        return new Result(ResultCode.OK, "read all bytes " + pathFrom); //возвращаем результат
     }
 }
