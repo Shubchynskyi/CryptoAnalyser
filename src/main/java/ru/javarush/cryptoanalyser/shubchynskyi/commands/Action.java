@@ -18,16 +18,14 @@ public interface Action {
 
     default Result copyWithKey(String source, String dest, int key) {
 
-        Path pathSource = Path.of(PathFinder.getRoot() + source); //путь к файлу который читаем
-        Path pathDest = Path.of(PathFinder.getRoot() + dest); //путь к файлу в который пишем
+        Path pathSource = Path.of(PathFinder.getRoot() + source);
+        Path pathDest = Path.of(PathFinder.getRoot() + dest);
 
         List<Character> alphabetWithKey = new ArrayList<>();
         for (char ch : Strings.ALPHABET.toCharArray()) {
             alphabetWithKey.add(ch);
         }
-        System.out.println(alphabetWithKey);
         Collections.rotate(alphabetWithKey, key);
-        System.out.println(alphabetWithKey);
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(pathSource)));

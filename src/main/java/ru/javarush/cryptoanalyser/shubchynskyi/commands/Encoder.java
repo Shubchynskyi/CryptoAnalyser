@@ -2,15 +2,7 @@ package ru.javarush.cryptoanalyser.shubchynskyi.commands;
 
 import ru.javarush.cryptoanalyser.shubchynskyi.constans.Strings;
 import ru.javarush.cryptoanalyser.shubchynskyi.entity.Result;
-import ru.javarush.cryptoanalyser.shubchynskyi.entity.ResultCode;
-import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Encoder implements Action {
     @Override
