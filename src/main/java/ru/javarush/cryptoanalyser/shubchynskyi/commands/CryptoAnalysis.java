@@ -4,12 +4,12 @@ import ru.javarush.cryptoanalyser.shubchynskyi.entity.Result;
 import ru.javarush.cryptoanalyser.shubchynskyi.exception.ApplicationException;
 import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 public class CryptoAnalysis implements Action {
@@ -17,6 +17,33 @@ public class CryptoAnalysis implements Action {
     public Result execute(String[] parameters) {
         // параметры:
         // 0 - источник, 1 - назначение, 2 - ключ(тут он не нужен) 3 - образец текста
+        NavigableMap<Integer, Character> sourceHashMap = textToHashMap(parameters[0]);
+        NavigableMap<Integer, Character> dictHashMap = textToHashMap(parameters[3]);
+
+        Path pathSource = Path.of(PathFinder.getRoot() + parameters[0]);
+        Path pathDest = Path.of(PathFinder.getRoot() + parameters[1]);
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(pathSource)));
+            if (Files.notExists(pathDest)) {
+                Files.createFile(pathDest);
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
+
+            while (reader.ready()) {
+                replaceLetter(reader, writer, sourceHashMap.pollLastEntry().getValue(), dictHashMap.pollLastEntry().getValue());
+            }
+
+            writer.flush();
+            reader.close();
+            writer.close();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
         //TODO
         // читаем символы из текста донора в hashmap, предварительно приводим к маленьким буквам - можно вынести в метод
         // преобразуем в treemap ИЛИ через итератор обходим, находим наибольшее значение (процент символа в тексте)
@@ -31,18 +58,26 @@ public class CryptoAnalysis implements Action {
     // и передаем в метод, который меняет в тексте источнике символ на другой
     // либо hashMap в treeMap, забираем верхнее значение и удаляем его, потом передаем значения в метод
 
-
-    private TreeMap<Character, Integer> hashToTree(Map<Character, Integer> hashMap) {
-//        TreeMap<Character, Integer> treeMap = new TreeMap<>();
-        //TODO logic
-
-
-        return null;
+    private void replaceLetter(BufferedReader reader, BufferedWriter writer, char from, char to) throws IOException {
+        String line = reader.readLine();
+        line = line.replace(from, to);
+        writer.write(line + "\n");
+        writer.flush();
     }
 
 
-    private Map<Character, Integer> textToHashMap(String sourceText) {
-        //TODO переводим HashMap в TreeMap - может быть отдельным методом?
+    private TreeMap<Integer, Character> hashToTree(Map<Character, Integer> hashMap) {
+        TreeMap<Integer, Character> treeMap = new TreeMap<>();
+
+        for (var var : hashMap.entrySet()) {
+            treeMap.put(var.getValue(), var.getKey());
+        }
+
+        return treeMap;
+    }
+
+
+    private TreeMap<Integer, Character> textToHashMap(String sourceText) {
         Path pathFrom = Path.of(PathFinder.getRoot() + sourceText);
         Map<Character, Integer> charsCount = new HashMap<>();
 
@@ -61,7 +96,7 @@ public class CryptoAnalysis implements Action {
             throw new ApplicationException();
         }
 
-        return charsCount;
+        return hashToTree(charsCount);
     }
 
 }

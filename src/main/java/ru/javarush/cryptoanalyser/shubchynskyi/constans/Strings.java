@@ -7,7 +7,7 @@ public class Strings {
     private static final String symbols = "!@#$%^&*()_+-=[]{}:;',./<>|?№ ~";
 
     public static final String ALPHABET = rus + rus.toUpperCase()
-                                        + eng + eng.toUpperCase()
+//                                        + eng + eng.toUpperCase()
                                         + cyphers + symbols;
 
     // TODO разделить алфавиты, добавить возможность выбора
