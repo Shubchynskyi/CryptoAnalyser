@@ -8,17 +8,18 @@ import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NavigableMap;
+import java.util.*;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class CryptoAnalysis implements Action {
     @Override
     public Result execute(String[] parameters) {
-        // 0 - источник, 1 - назначение, 2 - ключ(тут он не нужен) 3 - образец текста
+        //TODO вынести замену буквы в интерфейс, валидацию в замену буквы
+        //0 - источник, 1 - назначение, 2 - ключ(тут он не нужен) 3 - образец текста
+
         String sourceAlphabet = textToAlphabet(parameters[0], false);
-        String dictAlphabet = textToAlphabet(parameters[3], true);
+        String dictAlphabet = textToAlphabet(parameters[parameters.length-1], true);
 
         sourceAlphabet = trimAlphabet(sourceAlphabet, dictAlphabet);
         dictAlphabet = trimAlphabet(dictAlphabet, sourceAlphabet);
@@ -49,8 +50,30 @@ public class CryptoAnalysis implements Action {
                 }
             }
             writer.flush();
-            reader.close();
+
+            Scanner console = new Scanner(System.in);
+
+            while(true) {
+                System.out.println("Введите два символа для замены, первый символ меняем на второй.\n" +
+                        "\"exit\" для завершения работы" );
+                String firstString = console.next();
+                if (firstString.equals("exit")) {
+                    break;
+                }
+                String secondString = console.next();
+                if (secondString.equals("exit")){
+                    break;
+                }
+                if (validateString(firstString) && validateString(secondString)) {
+                    replaceLetter(pathDest, firstString.charAt(0), secondString.charAt(0));
+                } else {
+                    System.out.println("Некорректные данные, повторите ввод.");
+                }
+            }
+
+            writer.flush();
             writer.close();
+            reader.close();
 
 
         } catch (IOException e) {
@@ -60,6 +83,10 @@ public class CryptoAnalysis implements Action {
         return new Result(ResultCode.OK, "");
     }
 
+    private boolean validateString(String str) {
+        return str != null && str.length() == 1;
+    }
+
     private String trimAlphabet(String alphabet, String compareAlphabet) {
         if (alphabet.length() > compareAlphabet.length()) {
             alphabet = alphabet.substring(0, compareAlphabet.length());
@@ -67,11 +94,31 @@ public class CryptoAnalysis implements Action {
         return alphabet;
     }
 
+    void replaceLetter(Path pathDest, char firstChar, char secondChar) throws IOException {
+        Path tmp = Path.of(pathDest.getParent().toString()+"tmp.txt");
+        Files.copy(pathDest,tmp, REPLACE_EXISTING);
 
-    private String replaceLetter(String line, NavigableMap<Integer, Character> sourceMap, NavigableMap<Integer, Character> dictMap) {
+        BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(tmp)));
+        if (Files.notExists(pathDest)) {
+            Files.createFile(pathDest);
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
+        char ch;
+        while (reader.ready()){
+            ch = (char) reader.read();
+            if (ch != firstChar && ch != secondChar){
+                writer.write(ch);
+            } else if (ch == firstChar) {
+                writer.write(secondChar);
+            } else {
+                writer.write(firstChar);
+            }
 
-        return line;
-
+        }
+        writer.flush();
+        writer.close();
+        reader.close();
+        Files.deleteIfExists(tmp);
     }
 
 

@@ -15,7 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //TODO вынести message для Result в класс Strings или другое место
-// вынести валидацию в отдельный метод(в интерфейс?), добавить проверку на первую букву в каждом слове (массив String, сплит по пробелу)
+// вынести валидацию в отдельный метод(в интерфейс?),
+// добавить проверку на первую букву в каждом слове (массив String, сплит по пробелу)
 //
 
 public class BruteForce implements Action {
