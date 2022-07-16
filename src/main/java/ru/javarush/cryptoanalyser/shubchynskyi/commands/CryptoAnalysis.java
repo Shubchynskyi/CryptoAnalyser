@@ -1,24 +1,31 @@
 package ru.javarush.cryptoanalyser.shubchynskyi.commands;
 
 import ru.javarush.cryptoanalyser.shubchynskyi.entity.Result;
+import ru.javarush.cryptoanalyser.shubchynskyi.entity.ResultCode;
 import ru.javarush.cryptoanalyser.shubchynskyi.exception.ApplicationException;
 import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
-import java.util.TreeMap;
 
 public class CryptoAnalysis implements Action {
     @Override
     public Result execute(String[] parameters) {
-        // параметры:
         // 0 - источник, 1 - назначение, 2 - ключ(тут он не нужен) 3 - образец текста
-        NavigableMap<Integer, Character> sourceHashMap = textToHashMap(parameters[0]);
-        NavigableMap<Integer, Character> dictHashMap = textToHashMap(parameters[3]);
+        String sourceAlphabet = textToAlphabet(parameters[0], false);
+        String dictAlphabet = textToAlphabet(parameters[3], true);
+
+        sourceAlphabet = trimAlphabet(sourceAlphabet, dictAlphabet);
+        dictAlphabet = trimAlphabet(dictAlphabet, sourceAlphabet);
+        char[] dictAlphabetChars = dictAlphabet.toCharArray();
+
+        System.out.println(sourceAlphabet);
+        System.out.println(dictAlphabetChars);
 
         Path pathSource = Path.of(PathFinder.getRoot() + parameters[0]);
         Path pathDest = Path.of(PathFinder.getRoot() + parameters[1]);
@@ -30,10 +37,17 @@ public class CryptoAnalysis implements Action {
             }
             BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
 
+            char ch;
+            int index;
             while (reader.ready()) {
-                replaceLetter(reader, writer, sourceHashMap.pollLastEntry().getValue(), dictHashMap.pollLastEntry().getValue());
+                ch = (char) reader.read();
+                index = sourceAlphabet.indexOf(ch);
+                if (index >= 0) {
+                    writer.write(dictAlphabetChars[index]);
+                } else {
+                    writer.write(ch);
+                }
             }
-
             writer.flush();
             reader.close();
             writer.close();
@@ -43,48 +57,35 @@ public class CryptoAnalysis implements Action {
             throw new RuntimeException(e);
         }
 
-
-        //TODO
-        // читаем символы из текста донора в hashmap, предварительно приводим к маленьким буквам - можно вынести в метод
-        // преобразуем в treemap ИЛИ через итератор обходим, находим наибольшее значение (процент символа в тексте)
-        // и такое же наибольшее значение в тексте который надо расшифровать и через МЕТОД замены символа
-
-
-        throw new UnsupportedOperationException();
+        return new Result(ResultCode.OK, "");
     }
 
-    // метод - получаем из HashMap ключ максимального значения, возвращаем и удаляем его из карты
-    // метод - берем максимальный ключ из текста донора и максимальный текст из текса зашифрованного
-    // и передаем в метод, который меняет в тексте источнике символ на другой
-    // либо hashMap в treeMap, забираем верхнее значение и удаляем его, потом передаем значения в метод
-
-    private void replaceLetter(BufferedReader reader, BufferedWriter writer, char from, char to) throws IOException {
-        String line = reader.readLine();
-        line = line.replace(from, to);
-        writer.write(line + "\n");
-        writer.flush();
-    }
-
-
-    private TreeMap<Integer, Character> hashToTree(Map<Character, Integer> hashMap) {
-        TreeMap<Integer, Character> treeMap = new TreeMap<>();
-
-        for (var var : hashMap.entrySet()) {
-            treeMap.put(var.getValue(), var.getKey());
+    private String trimAlphabet(String alphabet, String compareAlphabet) {
+        if (alphabet.length() > compareAlphabet.length()) {
+            alphabet = alphabet.substring(0, compareAlphabet.length());
         }
-
-        return treeMap;
+        return alphabet;
     }
 
 
-    private TreeMap<Integer, Character> textToHashMap(String sourceText) {
+    private String replaceLetter(String line, NavigableMap<Integer, Character> sourceMap, NavigableMap<Integer, Character> dictMap) {
+
+        return line;
+
+    }
+
+
+    private String textToAlphabet(String sourceText, boolean lowRegister) {
         Path pathFrom = Path.of(PathFinder.getRoot() + sourceText);
-        Map<Character, Integer> charsCount = new HashMap<>();
+        HashMap<Character, Integer> charsCount = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(pathFrom.toString()))) {
             while (reader.ready()) {
                 String stringline = reader.readLine();
-                for (char ch : stringline.toLowerCase().toCharArray()) {
+                if (lowRegister) {
+                    stringline = stringline.toLowerCase();
+                }
+                for (char ch : stringline.toCharArray()) {
                     if (charsCount.containsKey(ch)) {
                         charsCount.replace(ch, (charsCount.get(ch) + 1));
                     } else {
@@ -96,7 +97,13 @@ public class CryptoAnalysis implements Action {
             throw new ApplicationException();
         }
 
-        return hashToTree(charsCount);
-    }
+        ArrayList<Map.Entry<Character, Integer>> list = new ArrayList<>(charsCount.entrySet());
+        list.sort((o1, o2) -> o2.getValue() - o1.getValue());
+        StringBuilder result = new StringBuilder();
+        for (var var : list) {
+            result.append(var.getKey());
+        }
 
+        return result.toString();
+    }
 }

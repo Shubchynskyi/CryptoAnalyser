@@ -6,9 +6,11 @@ public class Strings {
     private static final String cyphers = "1234567890";
     private static final String symbols = "!@#$%^&*()_+-=[]{}:;',./<>|?№ ~";
 
-    public static final String ALPHABET = rus + rus.toUpperCase()
+//    public static final String ALPHABET = rus + rus.toUpperCase()
 //                                        + eng + eng.toUpperCase()
-                                        + cyphers + symbols;
+//                                        + cyphers + symbols;
+
+    public static final String ALPHABET = rus + cyphers + symbols;
 
     // TODO разделить алфавиты, добавить возможность выбора
 

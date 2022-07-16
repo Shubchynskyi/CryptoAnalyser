@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 //TODO вынести message для Result в класс Strings или другое место
 // вынести валидацию в отдельный метод(в интерфейс?), добавить проверку на первую букву в каждом слове (массив String, сплит по пробелу)
+//
 
 public class BruteForce implements Action {
     public static final String DotOrCommaPlusSpace = "(\\.\\s)|(,\\s)";
@@ -78,7 +79,7 @@ public class BruteForce implements Action {
         if (validation) {
             return result;
         } else {
-            return new Result(ResultCode.ATTENTION, "Validation if fail! Combination \". \" and \", \" are missing");
+            return new Result(ResultCode.ERROR, "Validation if fail! Combination \". \" and \", \" are missing");
         }
 
     }

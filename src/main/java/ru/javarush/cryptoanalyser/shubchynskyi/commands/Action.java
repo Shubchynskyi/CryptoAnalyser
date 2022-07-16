@@ -55,5 +55,4 @@ public interface Action {
 
         return new Result(ResultCode.OK, "read all bytes " + pathSource);
     }
-
 }
