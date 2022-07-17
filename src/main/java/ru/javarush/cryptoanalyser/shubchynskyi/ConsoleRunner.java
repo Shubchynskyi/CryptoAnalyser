@@ -12,11 +12,11 @@ public class ConsoleRunner {
         if (args.length < 3) {
             Scanner scanner = new Scanner(System.in);
             System.out.print("\u001b[32m");
-            System.out.println("Доступны команды:");
+            System.out.println("Commands available:");
             System.out.print("\u001b[33m");
             System.out.println("Encode, Decode, Bruteforce, CryptoAnalysis");
             System.out.println("\u001b[32m");
-            System.out.println("Введите следующие параметры через пробел:");
+            System.out.println("Enter the following parameters separated by a space:");
             System.out.print("\u001b[33m");
             System.out.println("Command, Source filename, Destination filename, Key(if needed), Dictionary(if needed)");
             System.out.print("\u001b[0m");
