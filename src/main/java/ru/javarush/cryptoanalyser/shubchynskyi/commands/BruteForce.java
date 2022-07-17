@@ -14,10 +14,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO вынести message для Result в класс Strings или другое место
-// вынести валидацию в отдельный метод(в интерфейс?),
-// добавить проверку на первую букву в каждом слове (массив String, сплит по пробелу)
-//
 
 public class BruteForce implements Action {
     public static final String DotOrCommaPlusSpace = "(\\.\\s)|(,\\s)";
@@ -67,20 +63,37 @@ public class BruteForce implements Action {
             try (BufferedReader reader = new BufferedReader(
                     new FileReader((Path.of(PathFinder.getRoot() + parameters[1])).toString()))) {
 
+                int totalChar = 0;
+                int countOfValidationTrigger = 0;
+                int countOfValidationError = 0;
                 while (reader.ready()) {
                     String str = reader.readLine();
+                    String[] words = str.split("\s");
+                    for (String word : words) {
+                        if (word.length() > 0 && Strings.INVALIDATORS.indexOf(word.charAt(0)) > 0) {
+                            countOfValidationError++;
+                        }
+                    }
+                    totalChar = totalChar + str.length();
                     matcher = pattern.matcher(str);
-                    validation = matcher.find();
+                    if (matcher.find()) {
+                        countOfValidationTrigger++;
+                    }
                 }
+
+                if (countOfValidationError < totalChar / 1000 && countOfValidationTrigger > totalChar / 1000) {
+                    validation = true;
+                }
+
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                return new Result(ResultCode.ERROR, "File read error");
             }
         }
 
         if (validation) {
             return result;
         } else {
-            return new Result(ResultCode.ERROR, "Validation if fail! Combination \". \" and \", \" are missing");
+            return new Result(ResultCode.ERROR, "Validation if fail!");
         }
 
     }

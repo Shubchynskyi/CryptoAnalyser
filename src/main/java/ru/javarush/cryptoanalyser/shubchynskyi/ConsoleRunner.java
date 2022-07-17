@@ -8,19 +8,18 @@ import java.util.Scanner;
 
 
 public class ConsoleRunner {
-
-    //TODO - Брутфорс валидация выдает ошибку, хотя отрабатывает нормально
-    // файл после анализа должен появляться в списке для просмотра изменений(возможно надо закрыть поток, а потом уже менять буквы)
-
     public static void main(String[] args) {
         if (args.length < 3) {
             Scanner scanner = new Scanner(System.in);
+            System.out.print("\u001b[32m");
             System.out.println("Доступны команды:");
+            System.out.print("\u001b[33m");
             System.out.println("Encode, Decode, Bruteforce, CryptoAnalysis");
-            System.out.println();
+            System.out.println("\u001b[32m");
             System.out.println("Введите следующие параметры через пробел:");
+            System.out.print("\u001b[33m");
             System.out.println("Command, Source filename, Destination filename, Key(if needed), Dictionary(if needed)");
-            System.out.println();
+            System.out.print("\u001b[0m");
             args = scanner.nextLine().split(" ",5);
         }
 
