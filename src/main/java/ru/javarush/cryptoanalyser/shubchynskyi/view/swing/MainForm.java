@@ -1,25 +1,22 @@
 package ru.javarush.cryptoanalyser.shubchynskyi.view.swing;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MainForm extends JFrame{
     private JPanel mainpanel;
-    private JPanel top;
-    private JPanel left;
-    private JPanel bottom;
-    private JPanel right;
-    private JPanel center;
-    private JTextArea textArea1;
+    private JButton analysisButton;
+    private JTextField charFrom;
+    private JTextArea charTo;
+    private JButton bruteForceButton;
+    private JButton decodeButton;
+    private JButton replaceButton;
+    private JTextField аTextField1;
+    private JButton encodeButton;
     private JTextField textField1;
-    private JButton button2;
-    private JButton button1;
-    private JButton button4;
-    private JButton button3;
-    private JButton button5;
-    private JTextArea textArea2;
-    private JTextArea textArea3;
-    private JButton button6;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
+    private JButton helpButton;
 
     public MainForm() {
         initView();
