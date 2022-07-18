@@ -22,9 +22,18 @@ public class SwingForm extends JFrame{
     private JPasswordField password;
 
     public SwingForm() {
+        initView();
+        initListeners();
+        this.setVisible(true);
+    }
+
+    private void initView() {
         this.setBounds(300, 300, 400, 200);
         this.add(mainpanel);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
 
+    private void initListeners() {
         enter.addActionListener(e -> {
             String passwordTxt = new String(password.getPassword());
             if (passwordTxt.equals("qwerty")) {
@@ -32,13 +41,6 @@ public class SwingForm extends JFrame{
             } else {
                 label.setText("incorrect password");
             }
-        });
-
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);
-
-        button1.addActionListener(e -> {
-
         });
     }
 

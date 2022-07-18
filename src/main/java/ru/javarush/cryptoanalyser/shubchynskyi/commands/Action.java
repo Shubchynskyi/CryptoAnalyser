@@ -28,11 +28,8 @@ public interface Action {
         Collections.rotate(alphabetWithKey, key);
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(pathSource)));
-            if (Files.notExists(pathDest)) {
-                Files.createFile(pathDest);
-            }
-            BufferedWriter writer = new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
+            BufferedReader reader = getReader(pathSource);
+            BufferedWriter writer = getBufferedWriter(pathDest);
 
             char ch;
             int index;
@@ -54,5 +51,16 @@ public interface Action {
         }
 
         return new Result(ResultCode.OK, "read all bytes " + pathSource);
+    }
+
+    default BufferedWriter getBufferedWriter(Path pathDest) throws IOException {
+        if (Files.notExists(pathDest)) {
+            Files.createFile(pathDest);
+        }
+        return new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
+    }
+
+    default BufferedReader getReader(Path pathSource) throws FileNotFoundException {
+        return new BufferedReader(new FileReader(String.valueOf(pathSource)));
     }
 }
