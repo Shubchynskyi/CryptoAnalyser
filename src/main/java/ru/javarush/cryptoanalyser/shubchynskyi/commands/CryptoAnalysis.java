@@ -1,8 +1,10 @@
 package ru.javarush.cryptoanalyser.shubchynskyi.commands;
 
+import ru.javarush.cryptoanalyser.shubchynskyi.ConsoleRunner;
 import ru.javarush.cryptoanalyser.shubchynskyi.entity.Result;
 import ru.javarush.cryptoanalyser.shubchynskyi.entity.ResultCode;
 import ru.javarush.cryptoanalyser.shubchynskyi.exception.ApplicationException;
+import ru.javarush.cryptoanalyser.shubchynskyi.util.CharReplacer;
 import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 
 import java.io.*;
@@ -47,22 +49,24 @@ public class CryptoAnalysis implements Action {
             writer.close();
             reader.close();
 
-            Scanner console = new Scanner(System.in);
-            while(true) {
-                System.out.println("Enter two characters to replace, change the first character to the second.\n" +
-                        "\"exit\" to complete work" );
-                String firstString = console.next();
-                if (firstString.equals("exit")) {
-                    break;
-                }
-                String secondString = console.next();
-                if (secondString.equals("exit")){
-                    break;
-                }
-                if (validateString(firstString) && validateString(secondString)) {
-                    replaceLetter(pathDest, firstString.charAt(0), secondString.charAt(0));
-                } else {
-                    System.out.println("Incorrect data, please re-enter.");
+            if (ConsoleRunner.isConsoleRunning) {
+                Scanner console = new Scanner(System.in);
+                while(true) {
+                    System.out.println("Enter two characters to replace, change the first character to the second.\n" +
+                            "\"exit\" to complete work" );
+                    String firstString = console.next();
+                    if (firstString.equals("exit")) {
+                        break;
+                    }
+                    String secondString = console.next();
+                    if (secondString.equals("exit")){
+                        break;
+                    }
+                    if (validateString(firstString) && validateString(secondString)) {
+                            CharReplacer.replaceLetter(pathDest, firstString.charAt(0), secondString.charAt(0));
+                    } else {
+                        System.out.println("Incorrect data, please re-enter.");
+                    }
                 }
             }
 

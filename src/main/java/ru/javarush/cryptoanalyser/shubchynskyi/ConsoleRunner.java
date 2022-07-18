@@ -8,7 +8,11 @@ import java.util.Scanner;
 
 
 public class ConsoleRunner {
+
+    public static boolean isConsoleRunning = false;
+
     public static void main(String[] args) {
+        isConsoleRunning = true;
         if (args.length < 3) {
             Scanner scanner = new Scanner(System.in);
             System.out.print("\u001b[32m");
