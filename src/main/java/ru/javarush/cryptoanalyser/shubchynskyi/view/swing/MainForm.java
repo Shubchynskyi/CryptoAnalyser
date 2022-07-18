@@ -4,19 +4,20 @@ import javax.swing.*;
 
 public class MainForm extends JFrame{
     private JPanel mainpanel;
-    private JButton analysisButton;
+    private JTextArea textTo;
     private JTextField charFrom;
-    private JTextArea charTo;
+    private JTextField charTo;
+    private JButton analysisButton;
     private JButton bruteForceButton;
     private JButton decodeButton;
     private JButton replaceButton;
-    private JTextField аTextField1;
     private JButton encodeButton;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField dictField;
+    private JTextField sourceField;
+    private JTextField destField;
+    private JTextField keyField;
     private JButton helpButton;
+
 
     public MainForm() {
         initView();
@@ -24,8 +25,10 @@ public class MainForm extends JFrame{
     }
 
     private void initView() {
-        this.setBounds(300, 300, 500, 300);
+        this.setBounds(300, 300, 800, 600);
         this.add(mainpanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
+
+
 }

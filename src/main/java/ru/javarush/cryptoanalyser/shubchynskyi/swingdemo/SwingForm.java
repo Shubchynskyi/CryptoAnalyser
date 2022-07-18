@@ -6,15 +6,18 @@ import java.awt.event.ActionListener;
 
 public class SwingForm extends JFrame{
     private JPanel mainpanel;
-    private JPanel top;
-    private JPanel left;
-    private JPanel bottom;
-    private JPanel right;
-    private JPanel center;
+    private JTextArea textArea1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
+    private JTextField textField5;
+    private JTextField textField1;
     private JButton button1;
     private JButton button2;
     private JButton button3;
     private JButton button4;
+    private JButton button5;
+    private JButton button6;
 
     private JTextField login;
     private JButton enter;
@@ -43,5 +46,6 @@ public class SwingForm extends JFrame{
             }
         });
     }
+
 
 }
