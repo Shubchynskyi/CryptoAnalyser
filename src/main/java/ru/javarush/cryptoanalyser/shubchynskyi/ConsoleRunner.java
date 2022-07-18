@@ -14,7 +14,10 @@ public class ConsoleRunner {
             System.out.print("\u001b[32m");
             System.out.println("Commands available:");
             System.out.print("\u001b[33m");
-            System.out.println("Encode, Decode, Bruteforce, CryptoAnalysis");
+            System.out.println("\"Encode\" - encrypt from file to file using key");
+            System.out.println("\"Decode\"- decrypt from file to file using key");
+            System.out.println("\"Bruteforce\" - decrypt from file to file using brute force");
+            System.out.println("\"CryptoAnalysis\" - decrypt from file to file using statistical analysis");
             System.out.println("\u001b[32m");
             System.out.println("Enter the following parameters separated by a space:");
             System.out.print("\u001b[33m");
