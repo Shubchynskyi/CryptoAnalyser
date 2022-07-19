@@ -15,6 +15,4 @@ public class MainController {
             return new Result(ResultCode.ERROR,e.getMessage());
         }
     }
-
-
 }

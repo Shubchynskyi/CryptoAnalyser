@@ -6,5 +6,4 @@ public class SwingRunner {
     public static void main(String[] args) {
         MainForm mainForm = new MainForm();
     }
-
 }

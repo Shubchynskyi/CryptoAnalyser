@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
 public interface Action {
 
     Result execute(String[] parameters);
@@ -29,30 +27,28 @@ public interface Action {
         }
         Collections.rotate(alphabetWithKey, key);
 
-        try {
-            BufferedReader reader = getReader(pathSource);
-            BufferedWriter writer = getBufferedWriter(pathDest);
-
-            char ch;
-            int index;
-            while (reader.ready()) {
-                ch = (char) reader.read();
-                index = Strings.ALPHABET.indexOf(ch);
-                if (index >= 0) {
-                    writer.write(alphabetWithKey.get(index));
-                } else {
-                    writer.write(ch);
-                }
-            }
-            writer.flush();
-            reader.close();
-            writer.close();
-
+        try (BufferedReader reader = getBufferedReader(pathSource); BufferedWriter writer = getBufferedWriter(pathDest)) {
+            changeChars(alphabetWithKey, reader, writer);
         } catch (IOException e) {
-            return new Result(ResultCode.ERROR, "I/O Error");
+            return new Result(ResultCode.ERROR, Strings.MESSAGE_IO_ERROR);
         }
 
-        return new Result(ResultCode.OK, "read all bytes " + pathSource);
+        return new Result(ResultCode.OK, Strings.MESSAGE_RESULT_IS_OK + pathSource);
+    }
+
+    private void changeChars(List<Character> alphabetWithKey, BufferedReader reader, BufferedWriter writer) throws IOException {
+        char ch;
+        int index;
+        while (reader.ready()) {
+            ch = (char) reader.read();
+            index = Strings.ALPHABET.indexOf(ch);
+            if (index >= 0) {
+                writer.write(alphabetWithKey.get(index));
+            } else {
+                writer.write(ch);
+            }
+        }
+        writer.flush();
     }
 
     default BufferedWriter getBufferedWriter(Path pathDest) throws IOException {
@@ -62,7 +58,7 @@ public interface Action {
         return new BufferedWriter(new FileWriter(String.valueOf(pathDest)));
     }
 
-    default BufferedReader getReader(Path pathSource) throws FileNotFoundException {
+    default BufferedReader getBufferedReader(Path pathSource) throws FileNotFoundException {
         return new BufferedReader(new FileReader(String.valueOf(pathSource)));
     }
 

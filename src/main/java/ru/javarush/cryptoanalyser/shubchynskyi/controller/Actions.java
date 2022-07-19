@@ -10,7 +10,6 @@ public enum Actions {
 
     private final Action action;
 
-
     Actions(Action action) {
         this.action = action;
     }

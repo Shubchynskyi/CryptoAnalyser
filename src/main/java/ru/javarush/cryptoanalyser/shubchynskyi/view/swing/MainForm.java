@@ -14,8 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class MainForm extends JFrame{
-    private JPanel mainpanel;
+public class MainForm extends JFrame {
+    private JPanel mainPanel;
     private JTextField charFrom;
     private JTextField charTo;
     private JButton analysisButton;
@@ -31,18 +31,15 @@ public class MainForm extends JFrame{
     private JTextArea infoArea;
     private JTextPane textTo;
 
-
     private final String ENCODE = "encode";
     private final String DECODE = "decode";
     private final String BRUTEFORCE = "bruteforce";
     private final String CRYPTANALYSIS = "cryptoanalysis";
 
-
     public MainForm() {
         initView();
         initListeners();
         this.setVisible(true);
-
     }
 
     private void initListeners() {
@@ -71,7 +68,7 @@ public class MainForm extends JFrame{
             Path dest = Path.of(PathFinder.getRoot() + destField.getText());
             String first = charFrom.getText();
             String second = charTo.getText();
-            if(CharReplacer.validateString(first) && CharReplacer.validateString(second)) {
+            if (CharReplacer.validateString(first) && CharReplacer.validateString(second)) {
                 try {
                     CharReplacer.replaceLetter(dest, first.charAt(0), second.charAt(0));
                     infoArea.setText("Replace \"" + first.charAt(0) + "\" on \"" + second.charAt(0) + "\" is completed");
@@ -79,7 +76,7 @@ public class MainForm extends JFrame{
                     throw new RuntimeException(ex);
                 }
             } else {
-                infoArea.setText("Введены некорректные символы");
+                infoArea.setText("Invalid characters entered");
             }
             fileToTextArea(destField.getText());
         });
@@ -97,31 +94,29 @@ public class MainForm extends JFrame{
         try (BufferedReader reader = new BufferedReader(new FileReader(PathFinder.getRoot() + fileName))) {
             StringBuilder stringBuilder = new StringBuilder();
             while (reader.ready()) {
-                stringBuilder.append((char)reader.read());
+                stringBuilder.append((char) reader.read());
             }
             textTo.setText(stringBuilder.toString());
 
         } catch (IOException e) {
-            textTo.setText("File read error: \n" + e.getMessage());
+            textTo.setText(Strings.MESSAGE_FILE_READ_ERROR + "\n" + e.getMessage());
             throw new ApplicationException();
         }
     }
 
     private void initView() {
         this.setBounds(300, 300, 600, 400);
-        this.add(mainpanel);
+        this.add(mainPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
         textTo.setAutoscrolls(true);
     }
+
     //TODO исправить
-    private void run(String[] args){
+    private void run(String[] args) {
         MainController mainController = new MainController();
         Application application = new Application(mainController);
         Result result = application.run(args);
-        infoArea.setText(result.getMessage());
+        infoArea.setText(result.message());
     }
-
-
-
 }
