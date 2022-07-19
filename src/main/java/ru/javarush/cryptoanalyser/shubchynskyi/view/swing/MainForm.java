@@ -1,15 +1,18 @@
 package ru.javarush.cryptoanalyser.shubchynskyi.view.swing;
 
+import ru.javarush.cryptoanalyser.shubchynskyi.constans.Strings;
 import ru.javarush.cryptoanalyser.shubchynskyi.controller.MainController;
 import ru.javarush.cryptoanalyser.shubchynskyi.entity.Result;
 import ru.javarush.cryptoanalyser.shubchynskyi.exception.ApplicationException;
 import ru.javarush.cryptoanalyser.shubchynskyi.topLevel.Application;
+import ru.javarush.cryptoanalyser.shubchynskyi.util.CharReplacer;
 import ru.javarush.cryptoanalyser.shubchynskyi.util.PathFinder;
 
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class MainForm extends JFrame{
     private JPanel mainpanel;
@@ -39,6 +42,7 @@ public class MainForm extends JFrame{
         initView();
         initListeners();
         this.setVisible(true);
+
     }
 
     private void initListeners() {
@@ -61,6 +65,31 @@ public class MainForm extends JFrame{
         analysisButton.addActionListener(e -> {
             run(new String[]{CRYPTANALYSIS, sourceField.getText(), destField.getText(), dictField.getText()});
             fileToTextArea(destField.getText());
+        });
+
+        replaceButton.addActionListener(e -> {
+            Path dest = Path.of(PathFinder.getRoot() + destField.getText());
+            String first = charFrom.getText();
+            String second = charTo.getText();
+            if(CharReplacer.validateString(first) && CharReplacer.validateString(second)) {
+                try {
+                    CharReplacer.replaceLetter(dest, first.charAt(0), second.charAt(0));
+                    infoArea.setText("Replace \"" + first.charAt(0) + "\" on \"" + second.charAt(0) + "\" is completed");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                infoArea.setText("Введены некорректные символы");
+            }
+            fileToTextArea(destField.getText());
+        });
+
+        helpButton.addActionListener(e -> {
+            String help = Strings.ENCODE_INFO + "\n" +
+                    Strings.DECODE_INFO + "\n" +
+                    Strings.BRUTEFORCE_INFO + "\n" +
+                    Strings.CRYPTANALYSIS_INFO + "\n";
+            textTo.setText(help);
         });
     }
 

@@ -6,6 +6,8 @@ import java.nio.file.Path;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+
+
 public class CharReplacer {
     public static void replaceLetter(Path pathDest, char firstChar, char secondChar) throws IOException {
         Path tmp = Path.of(pathDest.getParent().toString()+"tmp.txt");
@@ -32,5 +34,9 @@ public class CharReplacer {
         writer.close();
         reader.close();
         Files.deleteIfExists(tmp);
+    }
+
+    public static boolean validateString(String str) {
+        return str != null && str.length() == 1;
     }
 }

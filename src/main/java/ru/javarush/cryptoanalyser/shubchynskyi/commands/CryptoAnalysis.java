@@ -62,7 +62,7 @@ public class CryptoAnalysis implements Action {
                     if (secondString.equals("exit")){
                         break;
                     }
-                    if (validateString(firstString) && validateString(secondString)) {
+                    if (CharReplacer.validateString(firstString) && CharReplacer.validateString(secondString)) {
                             CharReplacer.replaceLetter(pathDest, firstString.charAt(0), secondString.charAt(0));
                     } else {
                         System.out.println("Incorrect data, please re-enter.");
@@ -74,14 +74,8 @@ public class CryptoAnalysis implements Action {
             throw new RuntimeException(e);
         }
 
-        return new Result(ResultCode.OK, "");
+        return new Result(ResultCode.OK, "read all bytes " + pathSource);
     }
-
-    private boolean validateString(String str) {
-        return str != null && str.length() == 1;
-    }
-
-
 
     private String trimAlphabet(String alphabet, String compareAlphabet) {
         if (alphabet.length() > compareAlphabet.length()) {
