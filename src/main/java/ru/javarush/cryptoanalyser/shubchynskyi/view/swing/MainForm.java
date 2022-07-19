@@ -81,13 +81,7 @@ public class MainForm extends JFrame {
             fileToTextArea(destField.getText());
         });
 
-        helpButton.addActionListener(e -> {
-            String help = Strings.ENCODE_INFO + "\n" +
-                    Strings.DECODE_INFO + "\n" +
-                    Strings.BRUTEFORCE_INFO + "\n" +
-                    Strings.CRYPTANALYSIS_INFO + "\n";
-            textTo.setText(help);
-        });
+        helpButton.addActionListener(e -> textTo.setText(Strings.HELP_INFO));
     }
 
     private void fileToTextArea(String fileName) {
@@ -105,14 +99,12 @@ public class MainForm extends JFrame {
     }
 
     private void initView() {
-        this.setBounds(300, 300, 600, 400);
+        this.setBounds(500, 100, 600, 600);
         this.add(mainPanel);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
-        textTo.setAutoscrolls(true);
     }
 
-    //TODO исправить
     private void run(String[] args) {
         MainController mainController = new MainController();
         Application application = new Application(mainController);

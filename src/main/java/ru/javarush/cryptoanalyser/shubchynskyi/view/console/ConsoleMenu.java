@@ -41,10 +41,7 @@ public class ConsoleMenu {
 
     public static void initStartMenu() {
         System.out.println(COLOR_GREEN + "Commands available:");
-        System.out.println(COLOR_YELLOW + Strings.ENCODE_INFO);
-        System.out.println(Strings.DECODE_INFO);
-        System.out.println(Strings.BRUTEFORCE_INFO);
-        System.out.println(Strings.CRYPTANALYSIS_INFO + "\n");
+        System.out.println(COLOR_YELLOW + Strings.HELP_INFO);
         System.out.println(COLOR_GREEN + "Enter the following parameters separated by a space:");
         System.out.println(COLOR_YELLOW + "Command, Source filename, Destination filename, Key(if needed), Dictionary(if needed)");
         System.out.println(COLOR_WHITE);
