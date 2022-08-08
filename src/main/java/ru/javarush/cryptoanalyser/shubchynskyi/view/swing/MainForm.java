@@ -69,12 +69,8 @@ public class MainForm extends JFrame {
             String first = charFrom.getText();
             String second = charTo.getText();
             if (CharReplacer.validateString(first) && CharReplacer.validateString(second)) {
-                try {
-                    CharReplacer.replaceLetter(dest, first.charAt(0), second.charAt(0));
-                    infoArea.setText("Replace \"" + first.charAt(0) + "\" on \"" + second.charAt(0) + "\" is completed");
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                CharReplacer.replaceLetter(dest, first.charAt(0), second.charAt(0));
+                infoArea.setText("Replace \"" + first.charAt(0) + "\" on \"" + second.charAt(0) + "\" is completed");
             } else {
                 infoArea.setText("Invalid characters entered");
             }
